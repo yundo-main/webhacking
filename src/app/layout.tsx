@@ -17,13 +17,8 @@ export const metadata: Metadata = {
 // Reads the session at request time, so it streams in behind a Suspense boundary.
 async function UserMenu() {
   const user = await getUser();
-  if (!user) {
-    return (
-      <Link href="/login" className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-emerald-500">
-        로그인
-      </Link>
-    );
-  }
+  // Signed-out visitors log in from the front page, so the header shows nothing here.
+  if (!user) return null;
   return (
     <>
       <span className="text-sm text-zinc-700">{user.name}</span>
