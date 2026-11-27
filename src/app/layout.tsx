@@ -19,7 +19,7 @@ async function UserMenu() {
   const user = await getUser();
   if (!user) {
     return (
-      <Link href="/" className="text-sm text-zinc-300 hover:text-white">
+      <Link href="/login" className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-emerald-500">
         로그인
       </Link>
     );

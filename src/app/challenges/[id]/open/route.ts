@@ -4,12 +4,13 @@ import { auth } from "@/lib/auth";
 import { getChallenge } from "@/lib/challenges";
 import { competitionState } from "@/lib/competition";
 import { labOrigin, signToken } from "@/lib/lab-token";
+import { loginHref } from "@/lib/safe-next";
 
 /** Portal → lab host hand-off: a 2-minute launch token naming the player and the challenge. */
 export async function GET(request: NextRequest, { params }: RouteContext<"/challenges/[id]/open">) {
   const { id } = await params;
   const session = await auth.api.getSession({ headers: request.headers });
-  if (!session) return NextResponse.redirect(new URL("/", request.url), 303);
+  if (!session) return NextResponse.redirect(new URL(loginHref(`/challenges/${id}`), request.url), 303);
   if (!getChallenge(id) || !hasLab(id) || !competitionState().open) {
     return NextResponse.redirect(new URL(`/challenges/${id}`, request.url), 303);
   }

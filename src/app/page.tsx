@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { SignInButtons } from "@/components/auth-buttons";
-import { enabledProviders } from "@/lib/auth";
 import { competitionState } from "@/lib/competition";
 import { missingConfig } from "@/lib/config";
 import { getUser } from "@/lib/session";
@@ -25,13 +23,23 @@ async function HomeActions() {
         </div>
       )}
       {!competition.open && <p className="text-amber-400">{competition.reason}</p>}
-      {user ? (
-        <Link href="/challenges" className="inline-block rounded-md bg-emerald-600 px-5 py-2.5 font-semibold text-white hover:bg-emerald-500">
-          문제 보러 가기
+      <div className="flex flex-wrap gap-3">
+        {user ? null : (
+          <Link href="/login" className="inline-block rounded-md bg-emerald-600 px-5 py-2.5 font-semibold text-white hover:bg-emerald-500">
+            로그인하고 시작하기
+          </Link>
+        )}
+        <Link
+          href="/challenges"
+          className={
+            user
+              ? "inline-block rounded-md bg-emerald-600 px-5 py-2.5 font-semibold text-white hover:bg-emerald-500"
+              : "inline-block rounded-md border border-white/15 px-5 py-2.5 font-semibold hover:bg-white/10"
+          }
+        >
+          문제 둘러보기
         </Link>
-      ) : (
-        <SignInButtons providers={enabledProviders} />
-      )}
+      </div>
     </div>
   );
 }

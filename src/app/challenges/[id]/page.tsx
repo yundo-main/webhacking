@@ -5,6 +5,7 @@ import { submitFlag } from "@/app/actions";
 import { FlagForm } from "@/components/flag-form";
 import { hasLab } from "@/labs";
 import { CHALLENGES, getChallenge, type Challenge } from "@/lib/challenges";
+import { loginHref } from "@/lib/safe-next";
 import { getSolvedBy } from "@/lib/scoreboard";
 import { getUser } from "@/lib/session";
 
@@ -18,10 +19,10 @@ async function PlayerArea({ challenge }: { challenge: Challenge }) {
   if (!user) {
     return (
       <p className="text-sm text-zinc-400">
-        <Link href="/" className="underline">
+        <Link href={loginHref(`/challenges/${challenge.id}`)} className="text-emerald-400 underline">
           로그인
         </Link>
-        하면 실습 환경을 시작할 수 있습니다.
+        하면 문제 사이트를 열고 플래그를 제출할 수 있습니다.
       </p>
     );
   }

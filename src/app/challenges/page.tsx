@@ -13,7 +13,14 @@ async function ChallengeList() {
 
   return (
     <>
-      {!user && <p className="text-sm text-zinc-400">로그인하면 실습 환경을 시작하고 플래그를 제출할 수 있습니다.</p>}
+      {!user && (
+        <p className="text-sm text-zinc-400">
+          <Link href="/login?next=%2Fchallenges" className="text-emerald-400 underline">
+            로그인
+          </Link>
+          하면 문제 사이트를 열고 플래그를 제출할 수 있습니다.
+        </p>
+      )}
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {CHALLENGES.map((c) => (
           <li key={c.id}>
