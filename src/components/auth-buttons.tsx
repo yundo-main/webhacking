@@ -26,21 +26,21 @@ function ProviderIcon({ provider }: { provider: Provider }) {
   );
 }
 
-export function SignInButtons({ providers, callbackURL = "/challenges" }: { providers: Provider[]; callbackURL?: string }) {
+export type ProviderOption = { id: Provider; enabled: boolean };
+
+/** OAuth buttons. Providers whose keys are not configured yet stay visible but disabled. */
+export function SignInButtons({ providers, callbackURL = "/challenges" }: { providers: ProviderOption[]; callbackURL?: string }) {
   const [pending, setPending] = useState<Provider | null>(null);
   const [error, setError] = useState("");
 
-  if (providers.length === 0) {
-    return <p className="text-sm text-amber-400">로그인 제공자가 설정되지 않았습니다. 운영자에게 문의하세요.</p>;
-  }
-
   return (
     <div className="space-y-3">
-      {providers.map((provider) => (
+      {providers.map(({ id: provider, enabled }) => (
         <button
           key={provider}
           type="button"
-          disabled={pending !== null}
+          disabled={!enabled || pending !== null}
+          title={enabled ? undefined : "운영자가 아직 이 로그인 방식을 설정하지 않았습니다."}
           onClick={async () => {
             setPending(provider);
             setError("");
@@ -55,14 +55,15 @@ export function SignInButtons({ providers, callbackURL = "/challenges" }: { prov
               setPending(null);
             }
           }}
-          className="flex w-full items-center justify-center gap-3 rounded-md border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium hover:bg-white/10 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-3 rounded-md border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <ProviderIcon provider={provider} />
           {pending === provider ? "이동 중…" : LABELS[provider]}
+          {!enabled && <span className="text-xs text-zinc-500">(준비 중)</span>}
         </button>
       ))}
       {error && (
-        <p role="alert" className="text-sm text-rose-400">
+        <p role="alert" className="text-sm text-rose-600">
           {error}
         </p>
       )}
@@ -80,7 +81,7 @@ export function SignOutButton() {
         router.push("/");
         router.refresh();
       }}
-      className="text-sm text-zinc-400 hover:text-zinc-100"
+      className="text-sm text-zinc-600 hover:text-zinc-900"
     >
       로그아웃
     </button>

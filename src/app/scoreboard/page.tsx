@@ -6,12 +6,12 @@ async function ScoreTable() {
   await connection(); // live data: always render at request time
   const rows = await getScoreboard();
 
-  if (rows.length === 0) return <p className="text-sm text-zinc-400">아직 해결한 참가자가 없습니다.</p>;
+  if (rows.length === 0) return <p className="text-sm text-zinc-600">아직 해결한 참가자가 없습니다.</p>;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
-        <thead className="border-b border-white/10 text-zinc-400">
+        <thead className="border-b border-zinc-200 text-zinc-600">
           <tr>
             <th className="py-2 pr-4">순위</th>
             <th className="py-2 pr-4">참가자</th>
@@ -22,12 +22,12 @@ async function ScoreTable() {
         </thead>
         <tbody>
           {rows.map((row, index) => (
-            <tr key={row.userId} className="border-b border-white/5">
+            <tr key={row.userId} className="border-b border-zinc-100">
               <td className="py-2 pr-4 font-mono">{index + 1}</td>
               <td className="py-2 pr-4">{row.name}</td>
               <td className="py-2 pr-4 text-right font-mono">{row.score}</td>
               <td className="py-2 pr-4 text-right">{row.solves}</td>
-              <td className="py-2 text-right text-zinc-400">{row.lastSolve.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}</td>
+              <td className="py-2 text-right text-zinc-600">{row.lastSolve.toLocaleString("ko-KR", { timeZone: "Asia/Seoul" })}</td>
             </tr>
           ))}
         </tbody>
@@ -40,7 +40,7 @@ export default function ScoreboardPage() {
   return (
     <section className="space-y-6">
       <h1 className="text-2xl font-bold">스코어보드</h1>
-      <Suspense fallback={<p className="text-sm text-zinc-400">불러오는 중…</p>}>
+      <Suspense fallback={<p className="text-sm text-zinc-600">불러오는 중…</p>}>
         <ScoreTable />
       </Suspense>
     </section>

@@ -5,9 +5,9 @@ import type { SubmitState } from "@/app/actions";
 
 const COLORS: Record<SubmitState["status"], string> = {
   idle: "",
-  correct: "text-emerald-400",
-  wrong: "text-rose-400",
-  error: "text-amber-400",
+  correct: "text-emerald-700",
+  wrong: "text-rose-600",
+  error: "text-amber-700",
 };
 
 export function FlagForm({
@@ -28,7 +28,7 @@ export function FlagForm({
           autoComplete="off"
           spellCheck={false}
           placeholder="WH{...}"
-          className="min-w-0 flex-1 rounded-md border border-white/15 bg-black/40 px-3 py-2 font-mono text-sm outline-none focus:border-emerald-500"
+          className="min-w-0 flex-1 rounded-md border border-zinc-300 bg-white px-3 py-2 font-mono text-sm outline-none focus:border-emerald-500"
         />
         <button
           type="submit"

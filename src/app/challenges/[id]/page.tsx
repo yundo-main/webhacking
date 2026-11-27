@@ -18,8 +18,8 @@ async function PlayerArea({ challenge }: { challenge: Challenge }) {
   const user = await getUser();
   if (!user) {
     return (
-      <p className="text-sm text-zinc-400">
-        <Link href={loginHref(`/challenges/${challenge.id}`)} className="text-emerald-400 underline">
+      <p className="text-sm text-zinc-600">
+        <Link href={loginHref(`/challenges/${challenge.id}`)} className="text-emerald-700 underline">
           로그인
         </Link>
         하면 문제 사이트를 열고 플래그를 제출할 수 있습니다.
@@ -31,8 +31,8 @@ async function PlayerArea({ challenge }: { challenge: Challenge }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      <div className="space-y-3 rounded-lg border border-white/10 bg-white/[0.03] p-4">
-        <h2 className="text-sm font-semibold text-zinc-300">문제 사이트</h2>
+      <div className="space-y-3 rounded-lg border border-zinc-200 bg-white shadow-sm p-4">
+        <h2 className="text-sm font-semibold text-zinc-700">문제 사이트</h2>
         {hasLab(challenge.id) ? (
           <>
             <a
@@ -46,13 +46,13 @@ async function PlayerArea({ challenge }: { challenge: Challenge }) {
             <p className="text-xs text-zinc-500">나에게만 보이는 데이터로 새 탭에서 열립니다. 무엇을 해도 다른 참가자에게 영향이 없습니다.</p>
           </>
         ) : (
-          <p className="text-sm text-zinc-400">문제 사이트를 준비 중입니다.</p>
+          <p className="text-sm text-zinc-600">문제 사이트를 준비 중입니다.</p>
         )}
       </div>
-      <div className="space-y-3 rounded-lg border border-white/10 bg-white/[0.03] p-4">
-        <h2 className="text-sm font-semibold text-zinc-300">플래그 제출</h2>
+      <div className="space-y-3 rounded-lg border border-zinc-200 bg-white shadow-sm p-4">
+        <h2 className="text-sm font-semibold text-zinc-700">플래그 제출</h2>
         {solved ? (
-          <p className="text-sm text-emerald-400">✓ 이미 해결한 문제입니다.</p>
+          <p className="text-sm text-emerald-700">✓ 이미 해결한 문제입니다.</p>
         ) : (
           <FlagForm action={submitFlag.bind(null, challenge.id)} />
         )}
@@ -68,23 +68,23 @@ export default async function ChallengePage({ params }: PageProps<"/challenges/[
 
   return (
     <article className="space-y-6">
-      <Link href="/challenges" className="text-sm text-zinc-400 hover:text-white">
+      <Link href="/challenges" className="text-sm text-zinc-600 hover:text-zinc-900">
         ← 문제 목록
       </Link>
       <header className="space-y-1">
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-zinc-600">
           {challenge.category} · {challenge.difficulty} · <span className="font-mono">{challenge.points}점</span>
         </p>
         <h1 className="text-2xl font-bold">{challenge.title}</h1>
       </header>
-      <p className="text-zinc-300">{challenge.description}</p>
+      <p className="text-zinc-700">{challenge.description}</p>
       {challenge.hint && (
-        <details className="text-sm text-zinc-400">
+        <details className="text-sm text-zinc-600">
           <summary className="cursor-pointer">힌트</summary>
           <p className="mt-2">{challenge.hint}</p>
         </details>
       )}
-      <Suspense fallback={<p className="text-sm text-zinc-400">불러오는 중…</p>}>
+      <Suspense fallback={<p className="text-sm text-zinc-600">불러오는 중…</p>}>
         <PlayerArea challenge={challenge} />
       </Suspense>
     </article>

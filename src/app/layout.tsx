@@ -26,7 +26,7 @@ async function UserMenu() {
   }
   return (
     <>
-      <span className="text-sm text-zinc-300">{user.name}</span>
+      <span className="text-sm text-zinc-700">{user.name}</span>
       <SignOutButton />
     </>
   );
@@ -36,15 +36,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <header className="border-b border-white/10">
+        <header className="border-b border-zinc-200 bg-white">
           <nav className="mx-auto flex max-w-5xl items-center gap-6 px-4 py-3">
-            <Link href="/" className="font-mono font-bold text-emerald-400">
+            <Link href="/" className="font-mono font-bold text-emerald-700">
               WH&#123;ctf&#125;
             </Link>
-            <Link href="/challenges" className="text-sm text-zinc-300 hover:text-white">
+            <Link href="/challenges" className="text-sm text-zinc-700 hover:text-zinc-900">
               문제
             </Link>
-            <Link href="/scoreboard" className="text-sm text-zinc-300 hover:text-white">
+            <Link href="/scoreboard" className="text-sm text-zinc-700 hover:text-zinc-900">
               스코어보드
             </Link>
             <div className="ml-auto flex items-center gap-4">

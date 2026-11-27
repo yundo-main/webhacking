@@ -22,7 +22,7 @@ function message(error: { code?: string; status?: number } | null | undefined) {
 }
 
 const input =
-  "w-full rounded-md border border-white/15 bg-black/40 px-3 py-2 text-sm outline-none focus:border-emerald-500";
+  "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-500";
 const submit =
   "w-full rounded-md bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500 disabled:opacity-50";
 
@@ -64,7 +64,7 @@ export function EmailSignInForm({ next }: { next: string }) {
         {pending ? "로그인 중…" : "이메일로 로그인"}
       </button>
       {error && (
-        <p role="alert" className="text-sm text-rose-400">
+        <p role="alert" className="text-sm text-rose-600">
           {error}
         </p>
       )}
@@ -97,7 +97,7 @@ export function SignUpForm({ next }: { next: string }) {
         {pending ? "가입 중…" : "가입하기"}
       </button>
       {error && (
-        <p role="alert" className="text-sm text-rose-400">
+        <p role="alert" className="text-sm text-rose-600">
           {error}
         </p>
       )}
