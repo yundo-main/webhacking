@@ -1,6 +1,8 @@
 import {
+  bigint,
   boolean,
   index,
+  integer,
   pgSchema,
   primaryKey,
   serial,
@@ -62,6 +64,14 @@ export const verification = ctf.table("verification", {
   expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/** Better Auth rate limits, kept in the DB so they hold across serverless instances. */
+export const rateLimit = ctf.table("rate_limit", {
+  id: text("id").primaryKey(),
+  key: text("key").notNull().unique(),
+  count: integer("count").notNull(),
+  lastRequest: bigint("last_request", { mode: "number" }).notNull(),
 });
 
 // ── CTF tables ──

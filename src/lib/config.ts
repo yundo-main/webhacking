@@ -9,8 +9,6 @@ export function missingConfig() {
   if (!env.BETTER_AUTH_URL) missing.push("BETTER_AUTH_URL");
   if (!env.LAB_ORIGIN) missing.push("LAB_ORIGIN");
   if (!env.DATABASE_URL && !env.POSTGRES_URL) missing.push("DATABASE_URL (또는 POSTGRES_URL)");
-  const github = Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET);
-  const google = Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
-  if (!github && !google) missing.push("GITHUB_CLIENT_ID/SECRET 또는 GOOGLE_CLIENT_ID/SECRET");
+  // OAuth providers are optional: email/password sign-in always works.
   return missing;
 }

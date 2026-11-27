@@ -70,7 +70,7 @@ Supabase는 **Postgres DB로만** 씁니다. 로그인은 Better Auth가 이 DB�
    `[YOUR-PASSWORD]` 자리에는 프로젝트를 만들 때 정한 DB 비밀번호를 넣습니다.
 
 3. 스키마를 반영합니다. `npm run db:migrate`를 실행하면 `drizzle/` 폴더의 SQL이 적용되고, 테이블은 `ctf` 스키마에 만들어집니다.
-   - 명령을 실행할 수 없는 환경이라면 `drizzle/0000_init.sql` 내용을 Supabase SQL Editor에 붙여 넣어 실행해도 됩니다.
+   - 명령을 실행할 수 없는 환경이라면 `drizzle/` 폴더의 SQL 파일을 **번호 순서대로**(`0000_init.sql`, `0001_rate_limit.sql`, …) Supabase SQL Editor에 붙여 넣어 실행해도 됩니다.
 
 **`public` 스키마를 쓰지 않는 이유**
 - Supabase의 Data API는 기본적으로 `public` 스키마를 anon 키로 조회할 수 있게 열어 둡니다.
@@ -82,6 +82,20 @@ Supabase는 **Postgres DB로만** 씁니다. 로그인은 Better Auth가 이 DB�
 - Transaction pooler(6543)는 prepared statement를 지원하지 않습니다. 그래서 코드에서 `prepare: false`로 연결합니다 (`src/db/index.ts`).
 - Supabase 주소에는 SSL이 자동으로 적용됩니다 (`src/db/connection.ts`).
 
+## 로그인 방식
+
+| 방식 | 계정 ID | 필요한 설정 |
+|---|---|---|
+| 이메일 회원가입·로그인 | 이메일 | 없음 (항상 켜짐). `/signup`에서 닉네임·이메일·비밀번호(8자 이상)로 가입 |
+| GitHub | GitHub 계정 | `GITHUB_CLIENT_ID`/`SECRET` |
+| Google | Google 계정 | `GOOGLE_CLIENT_ID`/`SECRET` |
+
+- **이메일 인증 없음:** 메일 서버가 없어서 가입한 이메일이 본인 것인지 확인하지 않습니다. 그래서 같은 이메일로 나중에 GitHub·Google 로그인을 해도 이메일 계정에 **자동 연결되지 않습니다** (남의 이메일로 먼저 가입해 계정을 가로채는 공격 방지). 이 경우 "이미 이메일로 가입된 주소" 안내가 나옵니다.
+- **비밀번호 재설정 없음:** 메일 서버가 없어 제공하지 않습니다.
+- **가입 마감:** 대회가 시작되면 `EMAIL_SIGNUP_DISABLED=true`로 이메일 신규 가입을 막을 수 있습니다 (기존 계정 로그인은 유지).
+- **닉네임:** 스코어보드에 공개되며 30자로 잘리고 제어 문자는 제거됩니다. 이메일은 공개되지 않습니다.
+- **시도 제한:** 로그인·가입 요청은 DB(`ctf.rate_limit`)에 기록해 제한합니다. 서버리스 인스턴스가 여러 개여도 같이 적용됩니다.
+
 ## OAuth 설정
 
 | 제공자 | 콘솔 | Callback URL |
@@ -90,6 +104,8 @@ Supabase는 **Postgres DB로만** 씁니다. 로그인은 Better Auth가 이 DB�
 | Google | Google Cloud Console → APIs & Services → Credentials → OAuth client ID (웹 애플리케이션) | `<BETTER_AUTH_URL>/api/auth/callback/google` |
 
 로컬과 운영은 Callback URL이 다르므로 각각 등록하세요. 설정된 제공자만 로그인 버튼이 나타납니다.
+
+**Google 설정 순서:** Google Cloud Console → 프로젝트 선택(없으면 생성) → **APIs & Services → OAuth consent screen**에서 앱 이름·지원 이메일 입력, 대상은 External → **Credentials → Create Credentials → OAuth client ID** → 유형 *Web application* → 승인된 리디렉션 URI에 위 주소 입력 → 생성된 클라이언트 ID·보안 비밀번호를 Vercel `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`에 저장.
 
 ## Vercel 배포
 
@@ -100,7 +116,7 @@ Supabase는 **Postgres DB로만** 씁니다. 로그인은 Better Auth가 이 DB�
 3. Settings → Domains에 도메인 두 개를 연결합니다. 포털용(예: `ctf.example.com`)과 문제 사이트용(예: `lab.example-labs.net`)입니다.
 4. Environment Variables에 `.env.example`의 나머지 값을 넣습니다.
    - `BETTER_AUTH_URL`은 포털 주소, `LAB_ORIGIN`은 문제 사이트 주소입니다. 둘 다 `https://`로 시작해야 합니다.
-5. 스키마를 반영합니다. 로컬 `.env.local`에 운영 Supabase의 `DIRECT_URL`을 넣고 `npm run db:migrate`를 한 번 실행합니다. SQL Editor에 `drizzle/0000_init.sql`을 붙여 넣어 실행해도 됩니다.
+5. 스키마를 반영합니다. 로컬 `.env.local`에 운영 Supabase의 `DIRECT_URL`을 넣고 `npm run db:migrate`를 한 번 실행합니다. SQL Editor에서 `drizzle/`의 SQL 파일을 번호 순서대로 실행해도 됩니다.
 6. 스키마를 바꿀 때는 `src/db/schema.ts`를 수정한 뒤 `npm run db:generate`로 새 SQL을 만들고, 커밋한 다음 `npm run db:migrate`를 실행합니다.
 
 Preview 배포에서는 문제 사이트 도메인이 연결되지 않으므로 문제 사이트가 열리지 않습니다.
